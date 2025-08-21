@@ -51,7 +51,7 @@ const EventsFundraisers: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  Our biggest event of the year! Support SafeRevv's mission with an evening of community and giving.
+                  Our biggest event of the year! Support SAFER's mission with an evening of community and giving.
                 </p>
                 <Button className="w-full bg-green-600 hover:bg-green-700">Get Tickets</Button>
               </CardContent>

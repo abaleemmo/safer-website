@@ -7,7 +7,7 @@ import { ArrowRight } from "lucide-react";
 const Index: React.FC = () => {
   return (
     <Layout>
-      <div className="relative bg-cover bg-center h-[600px] flex items-center justify-center text-white" style={{ backgroundImage: "url('/public/placeholder.svg')" }}>
+      <div className="relative bg-blue-600 h-[600px] flex items-center justify-center text-white">
         {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative z-10 text-center px-4">
@@ -15,10 +15,10 @@ const Index: React.FC = () => {
             Zero Traffic Fatalities in Evansville.
           </h1>
           <p className="text-2xl mb-8 max-w-2xl mx-auto drop-shadow-md">
-            SafeRevv is dedicated to adopting Vision Zero principles to make our streets safer for everyone.
+            SAFER is dedicated to adopting Vision Zero principles to make our streets safer for everyone.
           </p>
           <div className="space-x-4">
-            <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 text-xl rounded-full">
+            <Button asChild className="bg-white hover:bg-gray-100 text-blue-600 font-bold py-3 px-8 text-xl rounded-full">
               <Link to="/donate">Donate Now</Link>
             </Button>
             <Button asChild variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 font-bold py-3 px-8 text-xl rounded-full">
@@ -45,14 +45,14 @@ const Index: React.FC = () => {
           <div className="text-center md:text-left">
             <h2 className="text-4xl font-bold mb-6 text-blue-700 dark:text-blue-400">Our Story: From Heartbreak to Hope</h2>
             <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-              SafeRevv was founded after a personal tragedy highlighted the urgent need for improved traffic safety in Evansville. What began as a private sorrow transformed into a public mission to prevent similar incidents for other families. We believe that every life is precious and every traffic death is preventable.
+              SAFER was founded after a personal tragedy highlighted the urgent need for improved traffic safety in Evansville. What began as a private sorrow transformed into a public mission to prevent similar incidents for other families. We believe that every life is precious and every traffic death is preventable.
             </p>
             <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full">
               <Link to="/about">Read Our Full Story</Link>
             </Button>
           </div>
-          <div className="flex justify-center">
-            <img src="/public/placeholder.svg" alt="Evansville community" className="rounded-lg shadow-lg max-w-full h-auto" />
+          <div className="flex justify-center w-full h-64 bg-gray-200 dark:bg-gray-700 rounded-lg shadow-lg flex items-center justify-center text-gray-500 dark:text-gray-400 text-lg">
+            [Image Placeholder]
           </div>
         </div>
       </section>

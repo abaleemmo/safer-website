@@ -46,7 +46,7 @@ const Contact: React.FC = () => {
             <div className="space-y-6 text-lg text-gray-700 dark:text-gray-300">
               <div className="flex items-center">
                 <Mail className="h-6 w-6 text-blue-600 mr-4" />
-                <span>info@saferevv.org</span>
+                <span>info@safer.org</span>
               </div>
               <div className="flex items-center">
                 <Phone className="h-6 w-6 text-blue-600 mr-4" />
@@ -65,13 +65,13 @@ const Contact: React.FC = () => {
               <h3 className="text-3xl font-bold mb-6 text-blue-700 dark:text-blue-400">Follow Us</h3>
               <div className="flex space-x-6">
                 <a href="#" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  <img src="/placeholder.svg" alt="Facebook" className="h-10 w-10" /> {/* Replace with actual social icons */}
+                  Facebook
                 </a>
                 <a href="#" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  <img src="/placeholder.svg" alt="Twitter" className="h-10 w-10" />
+                  Twitter
                 </a>
                 <a href="#" target="_blank" rel="noopener noreferrer" className="text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
-                  <img src="/placeholder.svg" alt="LinkedIn" className="h-10 w-10" />
+                  LinkedIn
                 </a>
               </div>
             </div>

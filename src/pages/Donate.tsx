@@ -9,12 +9,12 @@ const Donate: React.FC = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
-        <h1 className="text-5xl font-extrabold text-center mb-12 text-gray-900 dark:text-white">Support SafeRevv</h1>
+        <h1 className="text-5xl font-extrabold text-center mb-12 text-gray-900 dark:text-white">Support SAFER</h1>
 
         <section className="mb-16 text-center">
           <h2 className="text-4xl font-bold text-center mb-8 text-blue-700 dark:text-blue-400">Your Contribution Makes a Difference</h2>
           <p className="max-w-3xl mx-auto text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
-            Every dollar you donate to SafeRevv directly fuels our mission to achieve Vision Zero in Evansville. Your generosity helps us fund critical initiatives, advocate for policy changes, and educate our community on traffic safety. Together, we can eliminate traffic fatalities and serious injuries on our streets.
+            Every dollar you donate to SAFER directly fuels our mission to achieve Vision Zero in Evansville. Your generosity helps us fund critical initiatives, advocate for policy changes, and educate our community on traffic safety. Together, we can eliminate traffic fatalities and serious injuries on our streets.
           </p>
           <Button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 text-xl rounded-full">
             <DollarSign className="h-6 w-6 mr-2" /> Donate Securely Online
@@ -73,7 +73,7 @@ const Donate: React.FC = () => {
               <strong>Corporate Partnerships:</strong> Businesses can partner with us to support traffic safety initiatives.
             </p>
             <p>
-              <strong>Planned Giving:</strong> Consider including SafeRevv in your estate planning.
+              <strong>Planned Giving:</strong> Consider including SAFER in your estate planning.
             </p>
             <p className="mt-6">
               For more information on any of these options, please <Link to="/contact" className="text-blue-600 hover:underline">contact us</Link>.
