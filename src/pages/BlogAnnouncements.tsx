@@ -35,6 +35,21 @@ const BlogAnnouncements: React.FC = () => {
     },
   ];
 
+  const meetingMinutes = [
+    {
+      id: 1,
+      title: "Task Force Meeting Minutes - September 2024",
+      date: "September 25, 2024",
+      link: "#", // Placeholder for actual document link
+    },
+    {
+      id: 2,
+      title: "City Council Presentation Summary - August 2024",
+      date: "August 10, 2024",
+      link: "#",
+    },
+  ];
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
@@ -60,21 +75,25 @@ const BlogAnnouncements: React.FC = () => {
           </div>
         </section>
 
-        <section className="text-center">
-          <h2 className="text-4xl font-bold text-center mb-8 text-blue-700 dark:text-blue-400">Stay Informed</h2>
-          <p className="max-w-3xl mx-auto text-lg text-gray-700 dark:text-gray-300">
-            Subscribe to our newsletter to receive the latest news, event invitations, and progress reports directly in your inbox.
-          </p>
-          {/* Placeholder for newsletter signup form */}
-          <div className="mt-6 flex justify-center">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="p-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            />
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-r-md">
-              Subscribe
-            </button>
+        <section className="mb-16">
+          <h2 className="text-4xl font-bold text-center mb-8 text-blue-700 dark:text-blue-400">Past Meeting Minutes</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {meetingMinutes.map((minute) => (
+              <Card key={minute.id}>
+                <CardContent className="p-6 flex justify-between items-center">
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{minute.title}</h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">{minute.date}</p>
+                  </div>
+                  <Link to={minute.link} className="text-blue-600 hover:underline font-medium">
+                    View &rarr;
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
+            {meetingMinutes.length === 0 && (
+              <p className="text-center text-gray-600 dark:text-gray-400 col-span-full">No meeting minutes available yet.</p>
+            )}
           </div>
         </section>
       </div>

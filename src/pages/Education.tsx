@@ -77,7 +77,7 @@ const Education: React.FC = () => {
           <h2 className="text-4xl font-bold text-center mb-8 text-blue-700 dark:text-blue-400">External Links</h2>
           <div className="max-w-3xl mx-auto text-lg text-gray-700 dark:text-gray-300 space-y-4">
             <p>
-              <a href="https://visionzeroinitiative.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+              <a href="https://visionzeronetwork.org/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                 Vision Zero Network
               </a> - Learn more about the national movement.
             </p>

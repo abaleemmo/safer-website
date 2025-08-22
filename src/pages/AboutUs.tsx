@@ -15,7 +15,7 @@ const AboutUs: React.FC = () => {
               SAFER was born from a profound personal tragedy that illuminated a larger, systemic issue in our community. The loss of a loved one due to a preventable traffic incident in Evansville sparked a realization: this wasn't an isolated event, but a symptom of a broader problem of traffic fatalities and serious injuries.
             </p>
             <p className="mb-6">
-              After some time, we realized that such tragedies happen far too often. The statistics are staggering: over 42,000 Americans die in traffic accidents annually, with over 1 million annual fatalities worldwide. Historically, traffic incidents have accounted for over 100 million total deaths. This scale of loss is unacceptable and preventable.
+              After some time, we realized that such tragedies happen far too often. The statistics are staggering: over 40,000 Americans die in traffic accidents annually (NHTSA, 2023 preliminary data), with over 1 million annual fatalities worldwide (WHO, 2023). Historically, traffic incidents have accounted for over 100 million total deaths. This scale of loss is unacceptable and preventable.
             </p>
             <p className="mb-6">
               Instead of succumbing to despair, we chose action. We discovered the Vision Zero initiative, a global movement committed to eliminating traffic deaths and severe injuries. Inspired by its success in other cities, we committed ourselves to bringing this life-saving approach to Evansville. SAFER is the embodiment of that commitment – a community-driven effort to make our streets safer for everyone.

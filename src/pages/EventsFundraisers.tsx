@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CalendarDays, DollarSign } from "lucide-react";
+import { DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const EventsFundraisers: React.FC = () => {
@@ -13,49 +13,17 @@ const EventsFundraisers: React.FC = () => {
 
         <section className="mb-16">
           <h2 className="text-4xl font-bold text-center mb-8 text-blue-700 dark:text-blue-400">Upcoming Events</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl">Community Safety Walk</CardTitle>
-                <CardDescription className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                  <CalendarDays className="h-5 w-5" /> October 26, 2024 | 10:00 AM - 12:00 PM
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  Join us for a walk through the Lloyd intersection area to identify safety concerns and raise awareness for Vision Zero.
-                </p>
-                <Button className="w-full bg-green-600 hover:bg-green-700">Learn More & Register</Button>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl">Vision Zero Town Hall</CardTitle>
-                <CardDescription className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                  <CalendarDays className="h-5 w-5" /> November 15, 2024 | 6:00 PM - 8:00 PM
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  An open forum to discuss traffic safety issues and solutions with local leaders and the community.
-                </p>
-                <Button className="w-full bg-green-600 hover:bg-green-700">RSVP Now</Button>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl">Annual Fundraiser Gala</CardTitle>
-                <CardDescription className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                  <CalendarDays className="h-5 w-5" /> December 7, 2024 | 7:00 PM
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  Our biggest event of the year! Support SAFER's mission with an evening of community and giving to help us reach our fundraising goals.
-                </p>
-                <Button className="w-full bg-green-600 hover:bg-green-700">Get Tickets</Button>
-              </CardContent>
-            </Card>
+          <div className="max-w-4xl mx-auto bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">
+              Check our Google Calendar below for all upcoming events and fundraisers!
+            </p>
+            {/* Placeholder for Google Calendar Embed */}
+            <div className="w-full h-96 bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 text-xl rounded-md">
+              [Google Calendar Embed Will Go Here]
+            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
+              (Please provide the Google Calendar embed code to replace this placeholder.)
+            </p>
           </div>
         </section>
 
