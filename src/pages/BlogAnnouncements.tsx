@@ -7,14 +7,14 @@ const BlogAnnouncements: React.FC = () => {
   const blogPosts = [
     {
       id: 1,
-      title: "Evansville City Council Approves Vision Zero Resolution",
+      title: "Evansville City Council Unanimously Approves Vision Zero Resolution!",
       date: "October 1, 2024",
       summary: "A landmark decision for safer streets in Evansville. Read about the details and what it means for our community.",
       link: "#", // Placeholder for actual blog post link
     },
     {
       id: 2,
-      title: "SafeRevv Hosts Community Safety Workshop",
+      title: "SAFER Hosts Community Safety Workshop",
       date: "September 15, 2024",
       summary: "Recap of our recent workshop focused on pedestrian and cyclist safety. Learn key takeaways and future plans.",
       link: "#",

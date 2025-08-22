@@ -23,7 +23,7 @@ const EventsFundraisers: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  Join us for a walk through the Lloyd intersection area to identify safety concerns and raise awareness.
+                  Join us for a walk through the Lloyd intersection area to identify safety concerns and raise awareness for Vision Zero.
                 </p>
                 <Button className="w-full bg-green-600 hover:bg-green-700">Learn More & Register</Button>
               </CardContent>
@@ -37,7 +37,7 @@ const EventsFundraisers: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  An open forum to discuss traffic safety issues and solutions with local leaders.
+                  An open forum to discuss traffic safety issues and solutions with local leaders and the community.
                 </p>
                 <Button className="w-full bg-green-600 hover:bg-green-700">RSVP Now</Button>
               </CardContent>
@@ -51,7 +51,7 @@ const EventsFundraisers: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  Our biggest event of the year! Support SAFER's mission with an evening of community and giving.
+                  Our biggest event of the year! Support SAFER's mission with an evening of community and giving to help us reach our fundraising goals.
                 </p>
                 <Button className="w-full bg-green-600 hover:bg-green-700">Get Tickets</Button>
               </CardContent>
@@ -87,7 +87,7 @@ const EventsFundraisers: React.FC = () => {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl">"Light Up the Night" Campaign (Winter 2023)</CardTitle>
+                <CardTitle className="text-2xl">"Light Up the Night" Campaign (Winter 2024)</CardTitle>
                 <CardDescription>Distributing reflective gear to pedestrians and cyclists.</CardDescription>
               </CardHeader>
               <CardContent>

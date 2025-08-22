@@ -45,14 +45,14 @@ const Index: React.FC = () => {
           <div className="text-center md:text-left">
             <h2 className="text-4xl font-bold mb-6 text-blue-700 dark:text-blue-400">Our Story: From Heartbreak to Hope</h2>
             <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-              SAFER was founded after a personal tragedy highlighted the urgent need for improved traffic safety in Evansville. What began as a private sorrow transformed into a public mission to prevent similar incidents for other families. We believe that every life is precious and every traffic death is preventable.
+              SAFER was founded after a personal tragedy highlighted the urgent need for improved traffic safety in Evansville. What began as a private sorrow transformed into a public mission to prevent similar incidents for other families. We recognize the staggering scale of this issue, with over 42,000 Americans and 1 million people worldwide dying in traffic accidents annually, contributing to over 100 million total deaths in history. We believe that every life is precious and every traffic death is preventable.
             </p>
             <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full">
               <Link to="/about">Read Our Full Story</Link>
             </Button>
           </div>
           <div className="flex justify-center w-full h-64 bg-gray-200 dark:bg-gray-700 rounded-lg shadow-lg flex items-center justify-center text-gray-500 dark:text-gray-400 text-lg">
-            [Image Placeholder]
+            {/* No image placeholder */}
           </div>
         </div>
       </section>
