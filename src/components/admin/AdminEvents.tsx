@@ -4,18 +4,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { CalendarIcon, PlusCircle, Edit, Trash2 } from "lucide-react";
+import { CalendarIcon, PlusCircle, Edit, Trash2, Users } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
+interface Registration {
+  name: string;
+  email: string;
+}
 
 interface Event {
   id: string;
   title: string;
   date: Date;
   description: string;
-  link: string;
+  registrations: Registration[]; // New field for registrations
 }
 
 const AdminEvents: React.FC = () => {
@@ -24,28 +30,26 @@ const AdminEvents: React.FC = () => {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [description, setDescription] = useState("");
-  const [link, setLink] = useState("");
 
   const resetForm = () => {
     setTitle("");
     setDate(undefined);
     setDescription("");
-    setLink("");
     setEditingEvent(null);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !date || !description || !link) return;
+    if (!title || !date || !description) return;
 
     if (editingEvent) {
       setEvents(events.map((event) =>
         event.id === editingEvent.id
-          ? { ...event, title, date, description, link }
+          ? { ...event, title, date, description }
           : event
       ));
     } else {
-      setEvents([...events, { id: String(Date.now()), title, date, description, link }]);
+      setEvents([...events, { id: String(Date.now()), title, date, description, registrations: [] }]);
     }
     resetForm();
   };
@@ -55,12 +59,18 @@ const AdminEvents: React.FC = () => {
     setTitle(event.title);
     setDate(event.date);
     setDescription(event.description);
-    setLink(event.link);
   };
 
   const handleDelete = (id: string) => {
     setEvents(events.filter((event) => event.id !== id));
   };
+
+  // Dummy registration data for demonstration
+  const dummyRegistrations: Registration[] = [
+    { name: "Alice Smith", email: "alice@example.com" },
+    { name: "Bob Johnson", email: "bob@example.com" },
+    { name: "Charlie Brown", email: "charlie@example.com" },
+  ];
 
   return (
     <div className="space-y-8">
@@ -116,16 +126,6 @@ const AdminEvents: React.FC = () => {
                 required
               />
             </div>
-            <div>
-              <Label htmlFor="event-link">Registration/Info Link</Label>
-              <Input
-                id="event-link"
-                value={link}
-                onChange={(e) => setLink(e.target.value)}
-                placeholder="https://example.com/register"
-                required
-              />
-            </div>
             <div className="flex space-x-2">
               <Button type="submit" className="flex-grow">
                 <PlusCircle className="mr-2 h-4 w-4" /> {editingEvent ? "Update Event" : "Add Event"}
@@ -151,9 +151,32 @@ const AdminEvents: React.FC = () => {
                 <CardTitle>{event.title}</CardTitle>
                 <CardDescription>{format(event.date, "PPP")}</CardDescription>
               </CardHeader>
-              <CardContent className="flex justify-between items-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{event.description}</p>
-                <div className="flex space-x-2">
+              <CardContent className="flex flex-col justify-between items-start">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{event.description}</p>
+                <div className="flex space-x-2 self-end">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm" className="mr-2">
+                        <Users className="mr-2 h-4 w-4" /> View Registrations ({event.registrations.length})
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Registrations for "{event.title}"</DialogTitle>
+                      </DialogHeader>
+                      <div className="mt-4 space-y-2">
+                        {dummyRegistrations.length === 0 ? (
+                          <p>No registrations yet.</p>
+                        ) : (
+                          dummyRegistrations.map((reg, index) => (
+                            <p key={index} className="text-sm">
+                              <strong>{reg.name}</strong> - {reg.email}
+                            </p>
+                          ))
+                        )}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                   <Button variant="outline" size="icon" onClick={() => handleEdit(event)}>
                     <Edit className="h-4 w-4" />
                   </Button>

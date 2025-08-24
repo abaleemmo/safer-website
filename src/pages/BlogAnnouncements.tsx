@@ -12,6 +12,7 @@ const blogPosts = [
     date: new Date(2024, 9, 1), // October 1, 2024
     summary: "A landmark decision for safer streets in Evansville. Read about the details and what it means for our community.",
     link: "#", // Placeholder for actual blog post link
+    imageUrl: "https://via.placeholder.com/400x200/007bff/ffffff?text=City+Council",
   },
   {
     id: "b2",
@@ -19,6 +20,7 @@ const blogPosts = [
     date: new Date(2024, 8, 15), // September 15, 2024
     summary: "Recap of our recent workshop focused on pedestrian and cyclist safety. Learn key takeaways and future plans.",
     link: "#",
+    imageUrl: "https://via.placeholder.com/400x200/28a745/ffffff?text=Workshop",
   },
   {
     id: "b3",
@@ -26,6 +28,7 @@ const blogPosts = [
     date: new Date(2024, 7, 20), // August 20, 2024
     summary: "We've applied for significant funding to enhance safety at critical intersections like Lloyd and Fielding.",
     link: "#",
+    imageUrl: "https://via.placeholder.com/400x200/ffc107/000000?text=Grant+Application",
   },
   {
     id: "b4",
@@ -33,6 +36,7 @@ const blogPosts = [
     date: new Date(2024, 6, 5), // July 5, 2024
     summary: "Exciting news! We're expanding our network of partners dedicated to achieving Vision Zero.",
     link: "#",
+    imageUrl: "https://via.placeholder.com/400x200/17a2b8/ffffff?text=Partners",
   },
 ];
 
@@ -66,6 +70,9 @@ const BlogAnnouncements: React.FC = () => {
               blogPosts.map((post) => (
                 <Card key={post.id}>
                   <CardHeader>
+                    {post.imageUrl && (
+                      <img src={post.imageUrl} alt={post.title || "Blog image"} className="w-full h-48 object-cover rounded-t-lg mb-4" />
+                    )}
                     <CardTitle className="text-2xl">{post.title}</CardTitle>
                     <CardDescription className="text-gray-600 dark:text-gray-400">{format(post.date, "PPP")}</CardDescription>
                   </CardHeader>

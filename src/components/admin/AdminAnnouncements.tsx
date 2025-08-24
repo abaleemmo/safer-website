@@ -9,10 +9,11 @@ import { format } from "date-fns";
 
 interface Announcement {
   id: string;
-  title: string;
+  title?: string;
   date: Date;
-  summary: string;
-  link: string; // For full blog post or external link
+  summary?: string;
+  link?: string; // For full blog post or external link
+  imageUrl?: string; // New field for image
 }
 
 const AdminAnnouncements: React.FC = () => {
@@ -21,35 +22,47 @@ const AdminAnnouncements: React.FC = () => {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [link, setLink] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const resetForm = () => {
     setTitle("");
     setSummary("");
     setLink("");
+    setImageUrl("");
     setEditingAnnouncement(null);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !summary || !link) return;
+    // All fields are now optional, so no 'return' if empty
+
+    const newAnnouncement: Announcement = {
+      id: String(Date.now()),
+      date: new Date(),
+      ...(title && { title }),
+      ...(summary && { summary }),
+      ...(link && { link }),
+      ...(imageUrl && { imageUrl }),
+    };
 
     if (editingAnnouncement) {
       setAnnouncements(announcements.map((ann) =>
         ann.id === editingAnnouncement.id
-          ? { ...ann, title, summary, link, date: new Date() }
+          ? { ...ann, ...newAnnouncement, date: editingAnnouncement.date } // Keep original date for editing
           : ann
       ));
     } else {
-      setAnnouncements([...announcements, { id: String(Date.now()), title, date: new Date(), summary, link }]);
+      setAnnouncements([...announcements, newAnnouncement]);
     }
     resetForm();
   };
 
   const handleEdit = (announcement: Announcement) => {
     setEditingAnnouncement(announcement);
-    setTitle(announcement.title);
-    setSummary(announcement.summary);
-    setLink(announcement.link);
+    setTitle(announcement.title || "");
+    setSummary(announcement.summary || "");
+    setLink(announcement.link || "");
+    setImageUrl(announcement.imageUrl || "");
   };
 
   const handleDelete = (id: string) => {
@@ -61,38 +74,44 @@ const AdminAnnouncements: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle>{editingAnnouncement ? "Edit Announcement" : "Add New Announcement"}</CardTitle>
-          <CardDescription>Manage blog posts and announcements for the SAFER website.</CardDescription>
+          <CardDescription>Manage blog posts and announcements for the SAFER website. All fields are optional.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="announcement-title">Title</Label>
+              <Label htmlFor="announcement-title">Title (Optional)</Label>
               <Input
                 id="announcement-title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g., City Council Approves Vision Zero"
-                required
               />
             </div>
             <div>
-              <Label htmlFor="announcement-summary">Summary</Label>
+              <Label htmlFor="announcement-summary">Summary (Optional)</Label>
               <Textarea
                 id="announcement-summary"
                 value={summary}
                 onChange={(e) => setSummary(e.target.value)}
                 placeholder="Brief summary of the announcement or blog post"
-                required
               />
             </div>
             <div>
-              <Label htmlFor="announcement-link">Link (for full article/details)</Label>
+              <Label htmlFor="announcement-link">Link (for full article/details) (Optional)</Label>
               <Input
                 id="announcement-link"
                 value={link}
                 onChange={(e) => setLink(e.target.value)}
                 placeholder="https://example.com/full-article"
-                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="announcement-image-url">Image URL (Optional)</Label>
+              <Input
+                id="announcement-image-url"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                placeholder="https://example.com/image.jpg"
               />
             </div>
             <div className="flex space-x-2">
@@ -117,12 +136,20 @@ const AdminAnnouncements: React.FC = () => {
           announcements.map((ann) => (
             <Card key={ann.id}>
               <CardHeader>
-                <CardTitle>{ann.title}</CardTitle>
+                {ann.imageUrl && (
+                  <img src={ann.imageUrl} alt={ann.title || "Announcement image"} className="w-full h-32 object-cover rounded-md mb-4" />
+                )}
+                <CardTitle>{ann.title || "Untitled Announcement"}</CardTitle>
                 <CardDescription>{format(ann.date, "PPP")}</CardDescription>
               </CardHeader>
-              <CardContent className="flex justify-between items-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{ann.summary}</p>
-                <div className="flex space-x-2">
+              <CardContent className="flex flex-col justify-between items-start">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{ann.summary || "No summary provided."}</p>
+                {ann.link && (
+                  <a href={ann.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-sm mb-4">
+                    Read More &rarr;
+                  </a>
+                )}
+                <div className="flex space-x-2 self-end">
                   <Button variant="outline" size="icon" onClick={() => handleEdit(ann)}>
                     <Edit className="h-4 w-4" />
                   </Button>

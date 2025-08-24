@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { DollarSign, CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import { toast } from "sonner"; // Import toast for notifications
 
 // Placeholder data - this will eventually come from a global state or Supabase
 const upcomingEvents = [
@@ -13,21 +14,18 @@ const upcomingEvents = [
     title: "Community Safety Walk",
     date: new Date(2024, 9, 26), // October 26, 2024
     description: "Join us for a walk through the Lloyd intersection area to identify safety concerns and raise awareness for Vision Zero.",
-    link: "#",
   },
   {
     id: "2",
     title: "Vision Zero Town Hall",
     date: new Date(2024, 10, 15), // November 15, 2024
     description: "An open forum to discuss traffic safety issues and solutions with local leaders and the community.",
-    link: "#",
   },
   {
     id: "3",
     title: "Annual Fundraiser Gala",
     date: new Date(2024, 11, 7), // December 7, 2024
     description: "Our biggest event of the year! Support SAFER's mission with an evening of community and giving to help us reach our fundraising goals.",
-    link: "#",
   },
 ];
 
@@ -47,6 +45,11 @@ const pastEvents = [
 ];
 
 const EventsFundraisers: React.FC = () => {
+  const handleRegister = (eventName: string) => {
+    toast.success(`Successfully registered for ${eventName}!`);
+    // In a real application, this would send data to a backend
+  };
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
@@ -70,8 +73,8 @@ const EventsFundraisers: React.FC = () => {
                     <p className="text-gray-700 dark:text-gray-300 mb-4">
                       {event.description}
                     </p>
-                    <Button asChild className="w-full bg-green-600 hover:bg-green-700">
-                      <Link to={event.link}>Learn More & Register</Link>
+                    <Button onClick={() => handleRegister(event.title)} className="w-full bg-green-600 hover:bg-green-700">
+                      Register Now
                     </Button>
                   </CardContent>
                 </Card>
