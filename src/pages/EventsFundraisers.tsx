@@ -6,16 +6,50 @@ import { DollarSign, CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { useData, Registration } from "@/context/DataContext"; // Removed Event and PastEvent from import
+import { useData } from "@/context/DataContext";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const registrationSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().optional(),
+});
+
+type RegistrationFormInputs = z.infer<typeof registrationSchema>;
 
 const EventsFundraisers: React.FC = () => {
-  const { events, pastEvents, registerForEvent } = useData(); // Use data from context
+  const { events, pastEvents, registerForEvent } = useData();
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [selectedEventId, setSelectedEventId] = React.useState<string | null>(null);
+  const [selectedEventTitle, setSelectedEventTitle] = React.useState<string | null>(null);
 
-  const handleRegister = (eventId: string, eventName: string) => {
-    // For now, we'll add a dummy registration. In a real app, you'd collect user info.
-    const dummyRegistration: Registration = { name: "Guest User", email: "guest@example.com" };
-    registerForEvent(eventId, dummyRegistration);
-    toast.success(`Successfully registered for ${eventName}!`);
+  const form = useForm<RegistrationFormInputs>({
+    resolver: zodResolver(registrationSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+    },
+  });
+
+  const handleRegisterClick = (eventId: string, eventTitle: string) => {
+    setSelectedEventId(eventId);
+    setSelectedEventTitle(eventTitle);
+    setIsDialogOpen(true);
+  };
+
+  const onSubmit = (data: RegistrationFormInputs) => {
+    if (selectedEventId && selectedEventTitle) {
+      registerForEvent(selectedEventId, data);
+      toast.success(`Successfully registered for ${selectedEventTitle}!`);
+      form.reset();
+      setIsDialogOpen(false);
+    }
   };
 
   return (
@@ -41,7 +75,7 @@ const EventsFundraisers: React.FC = () => {
                     <p className="text-gray-700 dark:text-gray-300 mb-4">
                       {event.description}
                     </p>
-                    <Button onClick={() => handleRegister(event.id, event.title)} className="w-full bg-green-600 hover:bg-green-700">
+                    <Button onClick={() => handleRegisterClick(event.id, event.title)} className="w-full bg-green-600 hover:bg-green-700">
                       Register Now
                     </Button>
                   </CardContent>
@@ -50,6 +84,69 @@ const EventsFundraisers: React.FC = () => {
             )}
           </div>
         </section>
+
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Register for {selectedEventTitle}</DialogTitle>
+              <DialogDescription>
+                Enter your details to register for this event.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  {...form.register("name")}
+                  className="col-span-3"
+                />
+                {form.formState.errors.name && (
+                  <p className="col-span-4 text-right text-sm text-red-500">
+                    {form.formState.errors.name.message}
+                  </p>
+                )}
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="email" className="text-right">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  {...form.register("email")}
+                  className="col-span-3"
+                />
+                {form.formState.errors.email && (
+                  <p className="col-span-4 text-right text-sm text-red-500">
+                    {form.formState.errors.email.message}
+                  </p>
+                )}
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="phone" className="text-right">
+                  Phone (Optional)
+                </Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  {...form.register("phone")}
+                  className="col-span-3"
+                />
+                {form.formState.errors.phone && (
+                  <p className="col-span-4 text-right text-sm text-red-500">
+                    {form.formState.errors.phone.message}
+                  </p>
+                )}
+              </div>
+              <DialogFooter>
+                <Button type="submit">Register</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
 
         <section className="mb-16 text-center">
           <h2 className="text-4xl font-bold text-center mb-8 text-blue-700 dark:text-blue-400">Support Our Mission</h2>

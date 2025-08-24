@@ -10,10 +10,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useData, Event } from "@/context/DataContext"; // Removed Registration from import
+import { useData, Event } from "@/context/DataContext";
 
 const AdminEvents: React.FC = () => {
-  const { events, addEvent, updateEvent, deleteEvent } = useData(); // Use data from context
+  const { events, addEvent, updateEvent, deleteEvent } = useData();
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -146,9 +146,11 @@ const AdminEvents: React.FC = () => {
                           <p>No registrations yet.</p>
                         ) : (
                           event.registrations.map((reg, index) => (
-                            <p key={index} className="text-sm">
-                              <strong>{reg.name}</strong> - {reg.email}
-                            </p>
+                            <div key={index} className="text-sm border-b pb-2 last:border-b-0">
+                              <p><strong>Name:</strong> {reg.name}</p>
+                              <p><strong>Email:</strong> {reg.email}</p>
+                              {reg.phone && <p><strong>Phone:</strong> {reg.phone}</p>}
+                            </div>
                           ))
                         )}
                       </div>

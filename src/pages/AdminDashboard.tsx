@@ -7,6 +7,7 @@ import AdminAnnouncements from "@/components/admin/AdminAnnouncements";
 import AdminPastEvents from "@/components/admin/AdminPastEvents";
 import AdminProgress from "@/components/admin/AdminProgress";
 import AdminMeetingMinutes from "@/components/admin/AdminMeetingMinutes";
+import AdminContacts from "@/components/admin/AdminContacts"; // Import the new AdminContacts component
 
 const AdminDashboard: React.FC = () => {
   return (
@@ -21,12 +22,13 @@ const AdminDashboard: React.FC = () => {
         <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">Welcome, Admin!</h2>
 
         <Tabs defaultValue="events" className="w-full max-w-6xl mx-auto">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6"> {/* Increased grid columns */}
             <TabsTrigger value="events">Events</TabsTrigger>
             <TabsTrigger value="announcements">Announcements</TabsTrigger>
             <TabsTrigger value="past-events">Past Events</TabsTrigger>
             <TabsTrigger value="progress">Progress</TabsTrigger>
             <TabsTrigger value="minutes">Meeting Minutes</TabsTrigger>
+            <TabsTrigger value="contacts">Contacts</TabsTrigger> {/* New Contacts tab */}
           </TabsList>
           <TabsContent value="events" className="mt-6">
             <AdminEvents />
@@ -42,6 +44,9 @@ const AdminDashboard: React.FC = () => {
           </TabsContent>
           <TabsContent value="minutes" className="mt-6">
             <AdminMeetingMinutes />
+          </TabsContent>
+          <TabsContent value="contacts" className="mt-6"> {/* New Contacts tab content */}
+            <AdminContacts />
           </TabsContent>
         </Tabs>
       </main>

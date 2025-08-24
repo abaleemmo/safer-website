@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 export interface Registration {
   name: string;
   email: string;
+  phone?: string; // Optional phone number
 }
 
 export interface Event {
@@ -44,6 +45,15 @@ export interface MeetingMinute {
   link: string;
 }
 
+export interface Contact {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  source: "event" | "newsletter"; // To track where the contact came from
+  createdAt: Date;
+}
+
 // 2. Define the shape of the context value
 interface DataContextType {
   events: Event[];
@@ -69,6 +79,10 @@ interface DataContextType {
   addMeetingMinute: (minute: Omit<MeetingMinute, "id">) => void;
   updateMeetingMinute: (updatedMinute: MeetingMinute) => void;
   deleteMeetingMinute: (id: string) => void;
+
+  contacts: Contact[];
+  addContact: (contact: Omit<Contact, "id" | "createdAt">) => void;
+  deleteContact: (id: string) => void;
 }
 
 // Initial dummy data for public pages
@@ -151,6 +165,11 @@ const initialMeetingMinutes: MeetingMinute[] = [
   },
 ];
 
+const initialContacts: Contact[] = [
+  { id: "c1", name: "John Doe", email: "john.doe@example.com", phone: "555-123-4567", source: "newsletter", createdAt: new Date() },
+  { id: "c2", name: "Jane Smith", email: "jane.smith@example.com", source: "event", createdAt: new Date() },
+];
+
 
 // 3. Create the Context
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -162,6 +181,21 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [pastEvents, setPastEvents] = useState<PastEvent[]>(initialPastEvents);
   const [progressItems, setProgressItems] = useState<ProgressItem[]>(initialProgressItems);
   const [meetingMinutes, setMeetingMinutes] = useState<MeetingMinute[]>(initialMeetingMinutes);
+  const [contacts, setContacts] = useState<Contact[]>(initialContacts);
+
+  // Helper to add a contact if not already present (based on email)
+  const addContact = (newContact: Omit<Contact, "id" | "createdAt">) => {
+    setContacts((prev) => {
+      if (!prev.some(contact => contact.email === newContact.email)) {
+        return [...prev, { ...newContact, id: String(Date.now()), createdAt: new Date() }];
+      }
+      return prev;
+    });
+  };
+
+  const deleteContact = (id: string) => {
+    setContacts((prev) => prev.filter((c) => c.id !== id));
+  };
 
   // Event functions
   const addEvent = (event: Omit<Event, "id" | "registrations">) => {
@@ -175,9 +209,13 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
   const registerForEvent = (eventId: string, registration: Registration) => {
     setEvents((prev) =>
-      prev.map((e) =>
-        e.id === eventId ? { ...e, registrations: [...e.registrations, registration] } : e
-      )
+      prev.map((e) => {
+        if (e.id === eventId) {
+          addContact({ name: registration.name, email: registration.email, phone: registration.phone, source: "event" });
+          return { ...e, registrations: [...e.registrations, registration] };
+        }
+        return e;
+      })
     );
   };
 
@@ -239,6 +277,9 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     addMeetingMinute,
     updateMeetingMinute,
     deleteMeetingMinute,
+    contacts,
+    addContact,
+    deleteContact,
   };
 
   return <DataContext.Provider value={contextValue}>{children}</DataContext.Provider>;
