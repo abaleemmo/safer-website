@@ -15,10 +15,12 @@ import * as z from "zod";
 import { toast } from "sonner";
 import { useData } from "@/context/DataContext";
 import { supabase } from "@/integrations/supabase/client"; // Correctly import the supabase client instance
+import { Label } from "@/components/ui/label"; // Import Label for better form semantics
 
 const newsletterSchema = z.object({
-  name: z.string().optional(),
-  email: z.string().email("Invalid email address"),
+  name: z.string().min(1, "Name is required"), // Name is now mandatory
+  email: z.string().email("Invalid email address").min(1, "Email is required"), // Email is now mandatory
+  phone: z.string().optional(), // Phone is optional
 });
 
 type NewsletterFormInputs = z.infer<typeof newsletterSchema>;
@@ -29,21 +31,19 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { addContact } = useData();
-  // The supabase client is now directly imported, no need to call createClient()
-  // const supabase = createClient(); // This line is no longer needed
 
   const form = useForm<NewsletterFormInputs>({
     resolver: zodResolver(newsletterSchema),
     defaultValues: {
       name: "",
       email: "",
+      phone: "", // Initialize phone
     },
   });
 
   const onNewsletterSubmit = async (data: NewsletterFormInputs) => {
     try {
-      // Call Supabase Edge Function using the imported supabase instance
-      const { error: edgeFunctionError } = await supabase.functions.invoke('subscribe-newsletter', { // Removed edgeFunctionData
+      const { data: edgeFunctionResponse, error: edgeFunctionError } = await supabase.functions.invoke('subscribe-newsletter', {
         body: JSON.stringify(data),
       });
 
@@ -51,8 +51,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         throw new Error(edgeFunctionError.message);
       }
 
-      // Add to local DataContext contacts list
-      addContact({ name: data.name || "Subscriber", email: data.email, source: "newsletter" });
+      // Add to local DataContext contacts list using the data returned from the Edge Function
+      if (edgeFunctionResponse && edgeFunctionResponse.subscription) {
+        addContact(edgeFunctionResponse.subscription);
+      } else {
+        // Fallback if edge function doesn't return subscription data, though it should
+        addContact({ name: data.name, email: data.email, phone: data.phone, source: "newsletter" });
+      }
 
       toast.success("Successfully subscribed to the newsletter!");
       form.reset();
@@ -139,26 +144,50 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <p className="max-w-xl mx-auto text-lg mb-4">
               Subscribe to our newsletter to receive the latest news, event invitations, and progress reports directly in your inbox.
             </p>
-            <form onSubmit={form.handleSubmit(onNewsletterSubmit)} className="flex justify-center">
-              <Input
-                type="text"
-                placeholder="Your Name (Optional)"
-                {...form.register("name")}
-                className="p-3 border border-gray-600 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white max-w-xs"
-              />
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                {...form.register("email")}
-                className="p-3 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white max-w-xs"
-              />
-              <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-r-md">
+            <form onSubmit={form.handleSubmit(onNewsletterSubmit)} className="flex flex-col items-center space-y-4 max-w-md mx-auto">
+              <div className="w-full">
+                <Label htmlFor="newsletter-name" className="sr-only">Your Name</Label>
+                <Input
+                  id="newsletter-name"
+                  type="text"
+                  placeholder="Your Name"
+                  {...form.register("name")}
+                  className="w-full p-3 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white"
+                />
+                {form.formState.errors.name && (
+                  <p className="text-red-400 text-sm mt-1 text-left">{form.formState.errors.name.message}</p>
+                )}
+              </div>
+              <div className="w-full">
+                <Label htmlFor="newsletter-email" className="sr-only">Your Email</Label>
+                <Input
+                  id="newsletter-email"
+                  type="email"
+                  placeholder="Enter your email"
+                  {...form.register("email")}
+                  className="w-full p-3 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white"
+                />
+                {form.formState.errors.email && (
+                  <p className="text-red-400 text-sm mt-1 text-left">{form.formState.errors.email.message}</p>
+                )}
+              </div>
+              <div className="w-full">
+                <Label htmlFor="newsletter-phone" className="sr-only">Your Phone (Optional)</Label>
+                <Input
+                  id="newsletter-phone"
+                  type="tel"
+                  placeholder="Your Phone (Optional)"
+                  {...form.register("phone")}
+                  className="w-full p-3 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white"
+                />
+                {form.formState.errors.phone && (
+                  <p className="text-red-400 text-sm mt-1 text-left">{form.formState.errors.phone.message}</p>
+                )}
+              </div>
+              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md">
                 Subscribe
               </Button>
             </form>
-            {form.formState.errors.email && (
-              <p className="text-red-400 text-sm mt-2">{form.formState.errors.email.message}</p>
-            )}
           </div>
           <p>&copy; {new Date().getFullYear()} SAFER.org. All rights reserved.</p>
         </div>

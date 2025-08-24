@@ -49,7 +49,7 @@ const AdminContacts: React.FC = () => {
                     </div>
                   )}
                   <p className="text-xs text-gray-500 mt-2">
-                    Source: {contact.source} | Added: {format(contact.createdAt, "PPP")}
+                    Source: {contact.source} | Added: {format(contact.created_at, "PPP")}
                   </p>
                 </Card>
               ))}

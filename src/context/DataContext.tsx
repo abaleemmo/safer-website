@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client"; // Import Supabase client
 
 // 1. Define Interfaces for all data types
 export interface Registration {
@@ -51,8 +52,11 @@ export interface Contact {
   email: string;
   phone?: string;
   source: "event" | "newsletter"; // To track where the contact came from
-  createdAt: Date;
+  created_at: string; // Changed to string to match Supabase timestamp
 }
+
+// Define a type for new contacts being added, where id and created_at are optional
+export type NewContactInput = Omit<Contact, "id" | "created_at"> & { id?: string, created_at?: string };
 
 // 2. Define the shape of the context value
 interface DataContextType {
@@ -81,11 +85,11 @@ interface DataContextType {
   deleteMeetingMinute: (id: string) => void;
 
   contacts: Contact[];
-  addContact: (contact: Omit<Contact, "id" | "createdAt">) => void;
+  addContact: (contact: NewContactInput) => void; // Use NewContactInput here
   deleteContact: (id: string) => void;
 }
 
-// Initial dummy data for public pages
+// Initial dummy data for public pages (will be replaced by Supabase data for contacts)
 const initialEvents: Event[] = [
   {
     id: "1",
@@ -165,12 +169,6 @@ const initialMeetingMinutes: MeetingMinute[] = [
   },
 ];
 
-const initialContacts: Contact[] = [
-  { id: "c1", name: "John Doe", email: "john.doe@example.com", phone: "555-123-4567", source: "newsletter", createdAt: new Date() },
-  { id: "c2", name: "Jane Smith", email: "jane.smith@example.com", source: "event", createdAt: new Date() },
-];
-
-
 // 3. Create the Context
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
@@ -181,20 +179,59 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [pastEvents, setPastEvents] = useState<PastEvent[]>(initialPastEvents);
   const [progressItems, setProgressItems] = useState<ProgressItem[]>(initialProgressItems);
   const [meetingMinutes, setMeetingMinutes] = useState<MeetingMinute[]>(initialMeetingMinutes);
-  const [contacts, setContacts] = useState<Contact[]>(initialContacts);
+  const [contacts, setContacts] = useState<Contact[]>([]); // Initialize as empty, will fetch from Supabase
 
-  // Helper to add a contact if not already present (based on email)
-  const addContact = (newContact: Omit<Contact, "id" | "createdAt">) => {
-    setContacts((prev) => {
-      if (!prev.some(contact => contact.email === newContact.email)) {
-        return [...prev, { ...newContact, id: String(Date.now()), createdAt: new Date() }];
+  // Fetch contacts from Supabase on component mount
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const { data, error } = await supabase
+        .from('newsletter_subscriptions')
+        .select('*');
+
+      if (error) {
+        console.error("Error fetching contacts:", error);
+      } else {
+        setContacts(data as Contact[]);
       }
-      return prev;
-    });
+    };
+
+    fetchContacts();
+  }, []);
+
+  // Helper to add a contact to Supabase and local state
+  const addContact = async (newContact: NewContactInput) => {
+    // If the contact already has an ID (e.g., from Edge Function response), use it
+    if (newContact.id) {
+      setContacts((prev) => [...prev, newContact as Contact]);
+      return;
+    }
+
+    // Otherwise, insert into Supabase
+    const { data, error } = await supabase
+      .from('newsletter_subscriptions')
+      .insert({ name: newContact.name, email: newContact.email, phone: newContact.phone, source: newContact.source })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error adding contact to Supabase:", error);
+    } else if (data) {
+      setContacts((prev) => [...prev, data as Contact]);
+    }
   };
 
-  const deleteContact = (id: string) => {
-    setContacts((prev) => prev.filter((c) => c.id !== id));
+  // Helper to delete a contact from Supabase and local state
+  const deleteContact = async (id: string) => {
+    const { error } = await supabase
+      .from('newsletter_subscriptions')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error("Error deleting contact from Supabase:", error);
+    } else {
+      setContacts((prev) => prev.filter((c) => c.id !== id));
+    }
   };
 
   // Event functions
@@ -211,6 +248,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setEvents((prev) =>
       prev.map((e) => {
         if (e.id === eventId) {
+          // Add contact to Supabase and local state
           addContact({ name: registration.name, email: registration.email, phone: registration.phone, source: "event" });
           return { ...e, registrations: [...e.registrations, registration] };
         }
