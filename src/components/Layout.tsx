@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 import { useData } from "@/context/DataContext";
-import { createClient } from "@/integrations/supabase/client"; // Import Supabase client
+import { supabase } from "@/integrations/supabase/client"; // Correctly import the supabase client instance
 
 const newsletterSchema = z.object({
   name: z.string().optional(),
@@ -29,7 +29,8 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { addContact } = useData();
-  const supabase = createClient();
+  // The supabase client is now directly imported, no need to call createClient()
+  // const supabase = createClient(); // This line is no longer needed
 
   const form = useForm<NewsletterFormInputs>({
     resolver: zodResolver(newsletterSchema),
@@ -41,8 +42,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const onNewsletterSubmit = async (data: NewsletterFormInputs) => {
     try {
-      // Call Supabase Edge Function
-      const { data: edgeFunctionData, error: edgeFunctionError } = await supabase.functions.invoke('subscribe-newsletter', {
+      // Call Supabase Edge Function using the imported supabase instance
+      const { error: edgeFunctionError } = await supabase.functions.invoke('subscribe-newsletter', { // Removed edgeFunctionData
         body: JSON.stringify(data),
       });
 

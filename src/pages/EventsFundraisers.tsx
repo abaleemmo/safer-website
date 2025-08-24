@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { useData } from "@/context/DataContext";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog"; // Added DialogDescription, removed DialogTrigger
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
