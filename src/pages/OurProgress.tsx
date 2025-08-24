@@ -4,6 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle, Award, Users } from "lucide-react";
 
+// Placeholder data - this will eventually come from a global state or Supabase
+const progressItems = [
+  { id: "1", title: "Community Engagement", description: "Reached 75% of target neighborhoods for outreach.", value: 75 },
+  { id: "2", title: "Infrastructure Assessments", description: "Completed 50% of high-risk intersection assessments (e.g., Lloyd and Fielding).", value: 50 },
+  { id: "3", title: "Educational Workshops", description: "Conducted 60% of planned safety workshops.", value: 60 },
+];
+
 const OurProgress: React.FC = () => {
   return (
     <Layout>
@@ -62,21 +69,13 @@ const OurProgress: React.FC = () => {
                 <li><strong>Enforcement:</strong> Supporting consistent enforcement of traffic laws and speed limits.</li>
               </ul>
             </p>
-            <Card className="p-6">
-              <CardTitle className="mb-4 text-xl">Community Engagement</CardTitle>
-              <p className="text-gray-700 dark:text-gray-300 mb-2">Reached 75% of target neighborhoods for outreach.</p>
-              <Progress value={75} className="w-full" />
-            </Card>
-            <Card className="p-6">
-              <CardTitle className="mb-4 text-xl">Infrastructure Assessments</CardTitle>
-              <p className="text-gray-700 dark:text-gray-300 mb-2">Completed 50% of high-risk intersection assessments (e.g., Lloyd and Fielding).</p>
-              <Progress value={50} className="w-full" />
-            </Card>
-            <Card className="p-6">
-              <CardTitle className="mb-4 text-xl">Educational Workshops</CardTitle>
-              <p className="text-gray-700 dark:text-gray-300 mb-2">Conducted 60% of planned safety workshops.</p>
-              <Progress value={60} className="w-full" />
-            </Card>
+            {progressItems.map((item) => (
+              <Card key={item.id} className="p-6">
+                <CardTitle className="mb-4 text-xl">{item.title}</CardTitle>
+                <p className="text-gray-700 dark:text-gray-300 mb-2">{item.description}</p>
+                <Progress value={item.value} className="w-full" />
+              </Card>
+            ))}
           </div>
         </section>
 

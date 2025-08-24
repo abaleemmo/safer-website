@@ -2,8 +2,49 @@ import React from "react";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DollarSign } from "lucide-react";
+import { DollarSign, CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
+
+// Placeholder data - this will eventually come from a global state or Supabase
+const upcomingEvents = [
+  {
+    id: "1",
+    title: "Community Safety Walk",
+    date: new Date(2024, 9, 26), // October 26, 2024
+    description: "Join us for a walk through the Lloyd intersection area to identify safety concerns and raise awareness for Vision Zero.",
+    link: "#",
+  },
+  {
+    id: "2",
+    title: "Vision Zero Town Hall",
+    date: new Date(2024, 10, 15), // November 15, 2024
+    description: "An open forum to discuss traffic safety issues and solutions with local leaders and the community.",
+    link: "#",
+  },
+  {
+    id: "3",
+    title: "Annual Fundraiser Gala",
+    date: new Date(2024, 11, 7), // December 7, 2024
+    description: "Our biggest event of the year! Support SAFER's mission with an evening of community and giving to help us reach our fundraising goals.",
+    link: "#",
+  },
+];
+
+const pastEvents = [
+  {
+    id: "p1",
+    title: "Road Safety Workshop (Spring 2024)",
+    date: new Date(2024, 4, 10), // May 10, 2024
+    description: "We hosted a successful workshop attended by over 100 community members, focusing on pedestrian and cyclist safety.",
+  },
+  {
+    id: "p2",
+    title: "\"Light Up the Night\" Campaign (Winter 2024)",
+    date: new Date(2024, 1, 20), // February 20, 2024
+    description: "Over 500 reflective vests and lights were distributed, significantly improving visibility during evening hours.",
+  },
+];
 
 const EventsFundraisers: React.FC = () => {
   return (
@@ -13,17 +54,29 @@ const EventsFundraisers: React.FC = () => {
 
         <section className="mb-16">
           <h2 className="text-4xl font-bold text-center mb-8 text-blue-700 dark:text-blue-400">Upcoming Events</h2>
-          <div className="max-w-4xl mx-auto bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
-            <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">
-              Check our Google Calendar below for all upcoming events and fundraisers!
-            </p>
-            {/* Placeholder for Google Calendar Embed */}
-            <div className="w-full h-96 bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 text-xl rounded-md">
-              [Google Calendar Embed Will Go Here]
-            </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
-              (Please provide the Google Calendar embed code to replace this placeholder.)
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {upcomingEvents.length === 0 ? (
+              <p className="text-gray-500 col-span-full text-center">No upcoming events scheduled at the moment. Please check back soon!</p>
+            ) : (
+              upcomingEvents.map((event) => (
+                <Card key={event.id}>
+                  <CardHeader>
+                    <CardTitle className="text-2xl">{event.title}</CardTitle>
+                    <CardDescription className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                      <CalendarDays className="h-5 w-5" /> {format(event.date, "PPP")}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-700 dark:text-gray-300 mb-4">
+                      {event.description}
+                    </p>
+                    <Button asChild className="w-full bg-green-600 hover:bg-green-700">
+                      <Link to={event.link}>Learn More & Register</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
         </section>
 
@@ -42,28 +95,23 @@ const EventsFundraisers: React.FC = () => {
         <section>
           <h2 className="text-4xl font-bold text-center mb-8 text-blue-700 dark:text-blue-400">Past Events & Success Stories</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl">Road Safety Workshop (Spring 2024)</CardTitle>
-                <CardDescription>Educating the community on safe driving practices.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 dark:text-gray-300">
-                  We hosted a successful workshop attended by over 100 community members, focusing on pedestrian and cyclist safety.
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl">"Light Up the Night" Campaign (Winter 2024)</CardTitle>
-                <CardDescription>Distributing reflective gear to pedestrians and cyclists.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 dark:text-gray-300">
-                  Over 500 reflective vests and lights were distributed, significantly improving visibility during evening hours.
-                </p>
-              </CardContent>
-            </Card>
+            {pastEvents.length === 0 ? (
+              <p className="text-gray-500 col-span-full text-center">No past events or success stories to display yet.</p>
+            ) : (
+              pastEvents.map((event) => (
+                <Card key={event.id}>
+                  <CardHeader>
+                    <CardTitle className="text-2xl">{event.title}</CardTitle>
+                    <CardDescription>{format(event.date, "PPP")}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      {event.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
         </section>
       </div>
