@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
-import { useData, Announcement, MeetingMinute } from "@/context/DataContext"; // Import useData hook and interfaces
+import { useData } from "@/context/DataContext"; // Removed Announcement and MeetingMinute from import
 
 const BlogAnnouncements: React.FC = () => {
   const { announcements, meetingMinutes } = useData(); // Use data from context

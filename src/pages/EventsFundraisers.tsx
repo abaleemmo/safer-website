@@ -6,7 +6,7 @@ import { DollarSign, CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { useData, Event, PastEvent, Registration } from "@/context/DataContext"; // Import useData hook and interfaces
+import { useData, Registration } from "@/context/DataContext"; // Removed Event and PastEvent from import
 
 const EventsFundraisers: React.FC = () => {
   const { events, pastEvents, registerForEvent } = useData(); // Use data from context

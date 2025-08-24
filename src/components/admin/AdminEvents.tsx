@@ -10,7 +10,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useData, Event, Registration } from "@/context/DataContext"; // Import useData hook and interfaces
+import { useData, Event } from "@/context/DataContext"; // Removed Registration from import
 
 const AdminEvents: React.FC = () => {
   const { events, addEvent, updateEvent, deleteEvent } = useData(); // Use data from context

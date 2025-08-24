@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle, Award, Users } from "lucide-react";
-import { useData, ProgressItem } from "@/context/DataContext"; // Import useData hook and ProgressItem interface
+import { useData } from "@/context/DataContext"; // Removed ProgressItem from import
 
 const OurProgress: React.FC = () => {
   const { progressItems } = useData(); // Use data from context
