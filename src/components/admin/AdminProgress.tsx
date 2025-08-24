@@ -5,20 +5,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Save, Edit } from "lucide-react";
-
-interface ProgressItem {
-  id: string;
-  title: string;
-  description: string;
-  value: number; // Percentage 0-100
-}
+import { useData, ProgressItem } from "@/context/DataContext"; // Import useData hook and ProgressItem interface
 
 const AdminProgress: React.FC = () => {
-  const [progressItems, setProgressItems] = useState<ProgressItem[]>([
-    { id: "1", title: "Community Engagement", description: "Reached target neighborhoods for outreach.", value: 75 },
-    { id: "2", title: "Infrastructure Assessments", description: "Completed high-risk intersection assessments.", value: 50 },
-    { id: "3", title: "Educational Workshops", description: "Conducted planned safety workshops.", value: 60 },
-  ]);
+  const { progressItems, updateProgressItem } = useData(); // Use data from context
   const [editingId, setEditingId] = useState<string | null>(null);
   const [currentValue, setCurrentValue] = useState<number>(0);
   const [currentDescription, setCurrentDescription] = useState<string>("");
@@ -30,9 +20,10 @@ const AdminProgress: React.FC = () => {
   };
 
   const handleSave = (id: string) => {
-    setProgressItems(progressItems.map(item =>
-      item.id === id ? { ...item, value: currentValue, description: currentDescription } : item
-    ));
+    const itemToUpdate = progressItems.find(item => item.id === id);
+    if (itemToUpdate) {
+      updateProgressItem({ ...itemToUpdate, value: currentValue, description: currentDescription });
+    }
     setEditingId(null);
   };
 

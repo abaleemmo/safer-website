@@ -5,16 +5,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import { format } from "date-fns";
-
-interface MeetingMinute {
-  id: string;
-  title: string;
-  date: Date;
-  link: string; // Link to the document
-}
+import { useData, MeetingMinute } from "@/context/DataContext"; // Import useData hook and MeetingMinute interface
 
 const AdminMeetingMinutes: React.FC = () => {
-  const [minutes, setMinutes] = useState<MeetingMinute[]>([]);
+  const { meetingMinutes, addMeetingMinute, updateMeetingMinute, deleteMeetingMinute } = useData(); // Use data from context
   const [editingMinute, setEditingMinute] = useState<MeetingMinute | null>(null);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -32,13 +26,9 @@ const AdminMeetingMinutes: React.FC = () => {
     if (!title || !date || !link) return;
 
     if (editingMinute) {
-      setMinutes(minutes.map((minute) =>
-        minute.id === editingMinute.id
-          ? { ...minute, title, date, link }
-          : minute
-      ));
+      updateMeetingMinute({ ...editingMinute, title, date, link });
     } else {
-      setMinutes([...minutes, { id: String(Date.now()), title, date, link }]);
+      addMeetingMinute({ title, date, link });
     }
     resetForm();
   };
@@ -51,7 +41,7 @@ const AdminMeetingMinutes: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    setMinutes(minutes.filter((minute) => minute.id !== id));
+    deleteMeetingMinute(id);
   };
 
   return (
@@ -109,10 +99,10 @@ const AdminMeetingMinutes: React.FC = () => {
 
       <h3 className="text-2xl font-bold mt-8">Current Meeting Minutes</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {minutes.length === 0 ? (
+        {meetingMinutes.length === 0 ? (
           <p className="text-gray-500 col-span-full">No meeting minutes added yet.</p>
         ) : (
-          minutes.map((minute) => (
+          meetingMinutes.map((minute) => (
             <Card key={minute.id}>
               <CardHeader>
                 <CardTitle>{minute.title}</CardTitle>

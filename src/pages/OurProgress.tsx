@@ -3,15 +3,11 @@ import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle, Award, Users } from "lucide-react";
-
-// Placeholder data - this will eventually come from a global state or Supabase
-const progressItems = [
-  { id: "1", title: "Community Engagement", description: "Reached 75% of target neighborhoods for outreach.", value: 75 },
-  { id: "2", title: "Infrastructure Assessments", description: "Completed 50% of high-risk intersection assessments (e.g., Lloyd and Fielding).", value: 50 },
-  { id: "3", title: "Educational Workshops", description: "Conducted 60% of planned safety workshops.", value: 60 },
-];
+import { useData, ProgressItem } from "@/context/DataContext"; // Import useData hook and ProgressItem interface
 
 const OurProgress: React.FC = () => {
+  const { progressItems } = useData(); // Use data from context
+
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">

@@ -5,49 +5,17 @@ import { Button } from "@/components/ui/button";
 import { DollarSign, CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
-import { toast } from "sonner"; // Import toast for notifications
-
-// Placeholder data - this will eventually come from a global state or Supabase
-const upcomingEvents = [
-  {
-    id: "1",
-    title: "Community Safety Walk",
-    date: new Date(2024, 9, 26), // October 26, 2024
-    description: "Join us for a walk through the Lloyd intersection area to identify safety concerns and raise awareness for Vision Zero.",
-  },
-  {
-    id: "2",
-    title: "Vision Zero Town Hall",
-    date: new Date(2024, 10, 15), // November 15, 2024
-    description: "An open forum to discuss traffic safety issues and solutions with local leaders and the community.",
-  },
-  {
-    id: "3",
-    title: "Annual Fundraiser Gala",
-    date: new Date(2024, 11, 7), // December 7, 2024
-    description: "Our biggest event of the year! Support SAFER's mission with an evening of community and giving to help us reach our fundraising goals.",
-  },
-];
-
-const pastEvents = [
-  {
-    id: "p1",
-    title: "Road Safety Workshop (Spring 2024)",
-    date: new Date(2024, 4, 10), // May 10, 2024
-    description: "We hosted a successful workshop attended by over 100 community members, focusing on pedestrian and cyclist safety.",
-  },
-  {
-    id: "p2",
-    title: "\"Light Up the Night\" Campaign (Winter 2024)",
-    date: new Date(2024, 1, 20), // February 20, 2024
-    description: "Over 500 reflective vests and lights were distributed, significantly improving visibility during evening hours.",
-  },
-];
+import { toast } from "sonner";
+import { useData, Event, PastEvent, Registration } from "@/context/DataContext"; // Import useData hook and interfaces
 
 const EventsFundraisers: React.FC = () => {
-  const handleRegister = (eventName: string) => {
+  const { events, pastEvents, registerForEvent } = useData(); // Use data from context
+
+  const handleRegister = (eventId: string, eventName: string) => {
+    // For now, we'll add a dummy registration. In a real app, you'd collect user info.
+    const dummyRegistration: Registration = { name: "Guest User", email: "guest@example.com" };
+    registerForEvent(eventId, dummyRegistration);
     toast.success(`Successfully registered for ${eventName}!`);
-    // In a real application, this would send data to a backend
   };
 
   return (
@@ -58,10 +26,10 @@ const EventsFundraisers: React.FC = () => {
         <section className="mb-16">
           <h2 className="text-4xl font-bold text-center mb-8 text-blue-700 dark:text-blue-400">Upcoming Events</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {upcomingEvents.length === 0 ? (
+            {events.length === 0 ? (
               <p className="text-gray-500 col-span-full text-center">No upcoming events scheduled at the moment. Please check back soon!</p>
             ) : (
-              upcomingEvents.map((event) => (
+              events.map((event) => (
                 <Card key={event.id}>
                   <CardHeader>
                     <CardTitle className="text-2xl">{event.title}</CardTitle>
@@ -73,7 +41,7 @@ const EventsFundraisers: React.FC = () => {
                     <p className="text-gray-700 dark:text-gray-300 mb-4">
                       {event.description}
                     </p>
-                    <Button onClick={() => handleRegister(event.title)} className="w-full bg-green-600 hover:bg-green-700">
+                    <Button onClick={() => handleRegister(event.id, event.title)} className="w-full bg-green-600 hover:bg-green-700">
                       Register Now
                     </Button>
                   </CardContent>

@@ -10,22 +10,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-
-interface Registration {
-  name: string;
-  email: string;
-}
-
-interface Event {
-  id: string;
-  title: string;
-  date: Date;
-  description: string;
-  registrations: Registration[]; // New field for registrations
-}
+import { useData, Event, Registration } from "@/context/DataContext"; // Import useData hook and interfaces
 
 const AdminEvents: React.FC = () => {
-  const [events, setEvents] = useState<Event[]>([]);
+  const { events, addEvent, updateEvent, deleteEvent } = useData(); // Use data from context
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -43,13 +31,9 @@ const AdminEvents: React.FC = () => {
     if (!title || !date || !description) return;
 
     if (editingEvent) {
-      setEvents(events.map((event) =>
-        event.id === editingEvent.id
-          ? { ...event, title, date, description }
-          : event
-      ));
+      updateEvent({ ...editingEvent, title, date, description });
     } else {
-      setEvents([...events, { id: String(Date.now()), title, date, description, registrations: [] }]);
+      addEvent({ title, date, description });
     }
     resetForm();
   };
@@ -62,15 +46,8 @@ const AdminEvents: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    setEvents(events.filter((event) => event.id !== id));
+    deleteEvent(id);
   };
-
-  // Dummy registration data for demonstration
-  const dummyRegistrations: Registration[] = [
-    { name: "Alice Smith", email: "alice@example.com" },
-    { name: "Bob Johnson", email: "bob@example.com" },
-    { name: "Charlie Brown", email: "charlie@example.com" },
-  ];
 
   return (
     <div className="space-y-8">
@@ -165,10 +142,10 @@ const AdminEvents: React.FC = () => {
                         <DialogTitle>Registrations for "{event.title}"</DialogTitle>
                       </DialogHeader>
                       <div className="mt-4 space-y-2">
-                        {dummyRegistrations.length === 0 ? (
+                        {event.registrations.length === 0 ? (
                           <p>No registrations yet.</p>
                         ) : (
-                          dummyRegistrations.map((reg, index) => (
+                          event.registrations.map((reg, index) => (
                             <p key={index} className="text-sm">
                               <strong>{reg.name}</strong> - {reg.email}
                             </p>

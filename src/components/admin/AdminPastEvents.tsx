@@ -6,16 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import { format } from "date-fns";
-
-interface PastEvent {
-  id: string;
-  title: string;
-  date: Date;
-  description: string;
-}
+import { useData, PastEvent } from "@/context/DataContext"; // Import useData hook and PastEvent interface
 
 const AdminPastEvents: React.FC = () => {
-  const [pastEvents, setPastEvents] = useState<PastEvent[]>([]);
+  const { pastEvents, addPastEvent, updatePastEvent, deletePastEvent } = useData(); // Use data from context
   const [editingPastEvent, setEditingPastEvent] = useState<PastEvent | null>(null);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -33,13 +27,9 @@ const AdminPastEvents: React.FC = () => {
     if (!title || !date || !description) return;
 
     if (editingPastEvent) {
-      setPastEvents(pastEvents.map((event) =>
-        event.id === editingPastEvent.id
-          ? { ...event, title, date, description }
-          : event
-      ));
+      updatePastEvent({ ...editingPastEvent, title, date, description });
     } else {
-      setPastEvents([...pastEvents, { id: String(Date.now()), title, date, description }]);
+      addPastEvent({ title, date, description });
     }
     resetForm();
   };
@@ -52,7 +42,7 @@ const AdminPastEvents: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    setPastEvents(pastEvents.filter((event) => event.id !== id));
+    deletePastEvent(id);
   };
 
   return (

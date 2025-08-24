@@ -6,18 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import { format } from "date-fns";
-
-interface Announcement {
-  id: string;
-  title?: string;
-  date: Date;
-  summary?: string;
-  link?: string; // For full blog post or external link
-  imageUrl?: string; // New field for image
-}
+import { useData, Announcement } from "@/context/DataContext"; // Import useData hook and Announcement interface
 
 const AdminAnnouncements: React.FC = () => {
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const { announcements, addAnnouncement, updateAnnouncement, deleteAnnouncement } = useData(); // Use data from context
   const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
@@ -34,11 +26,8 @@ const AdminAnnouncements: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // All fields are now optional, so no 'return' if empty
 
-    const newAnnouncement: Announcement = {
-      id: String(Date.now()),
-      date: new Date(),
+    const announcementData = {
       ...(title && { title }),
       ...(summary && { summary }),
       ...(link && { link }),
@@ -46,13 +35,9 @@ const AdminAnnouncements: React.FC = () => {
     };
 
     if (editingAnnouncement) {
-      setAnnouncements(announcements.map((ann) =>
-        ann.id === editingAnnouncement.id
-          ? { ...ann, ...newAnnouncement, date: editingAnnouncement.date } // Keep original date for editing
-          : ann
-      ));
+      updateAnnouncement({ ...editingAnnouncement, ...announcementData });
     } else {
-      setAnnouncements([...announcements, newAnnouncement]);
+      addAnnouncement(announcementData);
     }
     resetForm();
   };
@@ -66,7 +51,7 @@ const AdminAnnouncements: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    setAnnouncements(announcements.filter((ann) => ann.id !== id));
+    deleteAnnouncement(id);
   };
 
   return (
